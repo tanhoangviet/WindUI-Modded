@@ -281,9 +281,13 @@ do
 		Border = true,
 	})
 
-	local AboutSection = AboutTab:Section({
-		Title = "About WindUI",
-	})
+		local AboutSection = AboutTab:Section({
+			Title = "About WindUI",
+		})
+
+		AboutSection:DiscordCard({
+			Link = "https://discord.gg/ftgs-development-hub-1300692552005189632",
+		})
 
 	AboutSection:Image({
 		Image = "https://repository-images.githubusercontent.com/880118829/22c020eb-d1b1-4b34-ac4d-e33fd88db38d",
