@@ -75,7 +75,11 @@ local Window = WindUI:CreateWindow({
 	--Author = "by .ftgs • Footagesus",
 	Folder = "ftgshub",
 	Icon = "solar:folder-2-bold-duotone",
-	--Theme = "Mellowsi",
+	Theme = "Obsidian",
+	SideBarCompact = false,
+	CompactSideBarWidth = 72,
+	Radius = 16,
+	ElementsRadius = 14,
 	--IconSize = 22*2,
 	NewElements = true,
 	--Size = UDim2.fromOffset(700,700),
@@ -101,6 +105,10 @@ local Window = WindUI:CreateWindow({
 		ButtonsType = "Mac", -- Default or Mac
 	},
 })
+
+-- Runtime UI helpers (new APIs)
+Window:SetSidebarCompact(false)
+Window:SetCorners(16, 14)
 
 --createPopup()
 
@@ -252,6 +260,18 @@ end
 
 -- */  About Tab  /* --
 do
+	local MainGroup = Window:Groupbox({
+		Title = "Main Groups",
+		Icon = "box",
+		Opened = true,
+	})
+
+	MainGroup:Tab({
+		Title = "Obsidian Compact",
+		Icon = "panel-left",
+		Desc = "Compact sidebar + icon only tabs demo",
+	})
+
 	local AboutTab = Window:Tab({
 		Title = "About WindUI",
 		Desc = "Description Example",
@@ -261,9 +281,13 @@ do
 		Border = true,
 	})
 
-	local AboutSection = AboutTab:Section({
-		Title = "About WindUI",
-	})
+		local AboutSection = AboutTab:Section({
+			Title = "About WindUI",
+		})
+
+		AboutSection:DiscordCard({
+			Link = "https://discord.gg/ftgs-development-hub-1300692552005189632",
+		})
 
 	AboutSection:Image({
 		Image = "https://repository-images.githubusercontent.com/880118829/22c020eb-d1b1-4b34-ac4d-e33fd88db38d",

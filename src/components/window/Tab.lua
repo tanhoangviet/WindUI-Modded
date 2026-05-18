@@ -248,6 +248,21 @@ function TabModule.New(Config, UIScale)
 		--Tab.UIElements.Icon = Icon
 	end
 
+	if Window.SideBarCompact then
+		Tab.UIElements.Main.Size = UDim2.new(1, -7, 0, 38)
+		Tab.UIElements.Main.AutomaticSize = "None"
+		Tab.UIElements.Main.Frame.AutomaticSize = "None"
+		Tab.UIElements.Main.Frame.Size = UDim2.new(1, 0, 1, 0)
+		Tab.UIElements.Main.Frame.TextLabel.Visible = false
+		Tab.UIElements.Main.Frame.UIListLayout.HorizontalAlignment = "Center"
+		Tab.UIElements.Main.Frame.UIPadding.PaddingLeft = UDim.new(0, 0)
+		Tab.UIElements.Main.Frame.UIPadding.PaddingRight = UDim.new(0, 0)
+
+		if Tab.UIElements.Icon then
+			Tab.UIElements.Icon.Size = UDim2.new(0, 18, 0, 18)
+		end
+	end
+
 	Tab.UIElements.ContainerFrame = New("ScrollingFrame", {
 		Size = UDim2.new(1, 0, 1, Tab.ShowTabTitle and -((Window.UIPadding * 2.4) + 12) or 0),
 		BackgroundTransparency = 1,
