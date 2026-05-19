@@ -52,6 +52,11 @@ local function fetchInviteData(link)
 end
 
 function Element:New(Config)
+	local ElementConfig = table.clone(Config)
+	ElementConfig.Hover = false
+	ElementConfig.TextOffset = ElementConfig.TextOffset or 0
+	ElementConfig.ParentConfig = ElementConfig
+
 	local Card = {
 		__type = "DiscordCard",
 		Link = Config.Link or Config.Url or "",
@@ -60,7 +65,7 @@ function Element:New(Config)
 		Thumbnail = Config.Thumbnail or "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4ac.png",
 	}
 
-	local ElementFrame = require("../components/window/Element")(table.clone(Config))
+	local ElementFrame = require("../components/window/Element")(ElementConfig)
 	Card.DiscordCardFrame = ElementFrame
 
 	local inviteData = fetchInviteData(Card.Link)
