@@ -25,7 +25,7 @@ do
 			WindUI = require(cloneref(ReplicatedStorage:WaitForChild("WindUI"):WaitForChild("Init")))
 		else
 			WindUI =
-				loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+				loadstring(game:HttpGet("https://raw.githubusercontent.com/tanhoangviet/WindUI-Modded/refs/heads/main/dist/main.lua"))()
 		end
 	end
 end
@@ -75,7 +75,11 @@ local Window = WindUI:CreateWindow({
 	--Author = "by .ftgs • Footagesus",
 	Folder = "ftgshub",
 	Icon = "solar:folder-2-bold-duotone",
-	--Theme = "Mellowsi",
+	Theme = "Obsidian",
+	SideBarCompact = false,
+	CompactSideBarWidth = 72,
+	Radius = 16,
+	ElementsRadius = 14,
 	--IconSize = 22*2,
 	NewElements = true,
 	--Size = UDim2.fromOffset(700,700),
@@ -100,6 +104,17 @@ local Window = WindUI:CreateWindow({
 		Height = 44,
 		ButtonsType = "Mac", -- Default or Mac
 	},
+})
+
+-- Runtime UI helpers (new APIs)
+Window:SetSidebarCompact(false)
+Window:SetCorners(16, 14)
+Window:Watermark({
+	Text = "WindUI Obsidian • Example",
+})
+Window:KeyBindMenu()
+Window:Footer({
+	Text = "Obsidian UI • Mobile Ready",
 })
 
 --createPopup()
@@ -252,6 +267,18 @@ end
 
 -- */  About Tab  /* --
 do
+	local MainGroup = Window:Groupbox({
+		Title = "Main Groups",
+		Icon = "box",
+		Opened = true,
+	})
+
+	MainGroup:Tab({
+		Title = "Obsidian Compact",
+		Icon = "panel-left",
+		Desc = "Compact sidebar + icon only tabs demo",
+	})
+
 	local AboutTab = Window:Tab({
 		Title = "About WindUI",
 		Desc = "Description Example",
@@ -261,9 +288,11 @@ do
 		Border = true,
 	})
 
-	local AboutSection = AboutTab:Section({
-		Title = "About WindUI",
-	})
+		local AboutSection = AboutTab:Groupbox({})
+
+		AboutSection:DiscordCard({
+			Link = "https://discord.gg/ftgs-development-hub-1300692552005189632",
+		})
 
 	AboutSection:Image({
 		Image = "https://repository-images.githubusercontent.com/880118829/22c020eb-d1b1-4b34-ac4d-e33fd88db38d",
@@ -273,20 +302,17 @@ do
 
 	AboutSection:Space({ Columns = 3 })
 
-	AboutSection:Section({
-		Title = "What is WindUI?",
-		TextSize = 24,
-		FontWeight = Enum.FontWeight.SemiBold,
-	})
+		AboutSection:Paragraph({
+			Title = "What is WindUI?",
+			Desc = "Overview",
+		})
 
 	AboutSection:Space()
 
-	AboutSection:Section({
-		Title = "WindUI is a stylish, open-source UI (User Interface) library specifically designed for Roblox Script Hubs.\nDeveloped by Footagesus (.ftgs, Footages).\nIt aims to provide developers with a modern, customizable, and easy-to-use toolkit for creating visually appealing interfaces within Roblox.\nThe project is primarily written in Lua (Luau), the scripting language used in Roblox.",
-		TextSize = 18,
-		TextTransparency = 0.35,
-		FontWeight = Enum.FontWeight.Medium,
-	})
+		AboutSection:Paragraph({
+			Title = "WindUI is a stylish, open-source UI library for Roblox script hubs.",
+			Desc = "Developed by Footagesus (.ftgs). Focused on modern customizable interfaces in Luau.",
+		})
 
 	AboutTab:Space({ Columns = 4 })
 
@@ -1211,6 +1237,80 @@ do
 			Color = "Red",
 		})
 	end
+end
+
+do
+	local PremiumTab = Window:Tab({
+		Title = "Premium",
+		Icon = "crown",
+	})
+
+	local PremiumGroup = PremiumTab:Groupbox({})
+	local PremiumCard = Window:TabCard({
+		Parent = PremiumTab.ContainerFrame.ScrollingFrame,
+		Title = "Premium Gold Mode",
+		Tab = PremiumTab,
+	})
+	PremiumGroup:Paragraph({
+		Title = "Premium Page",
+		Desc = "Golden gradient + shiny animation style.",
+	})
+	PremiumGroup:Button({
+		Title = "Golden Action",
+		Callback = function() end,
+	})
+	PremiumGroup:Input({
+		Title = "Premium Input",
+		Placeholder = "Type here...",
+		Callback = function() end,
+	})
+	task.spawn(function()
+		if PremiumCard and PremiumCard.GradientShell and PremiumCard.GradientShell.UIGradient then
+			while PremiumCard.Parent do
+				PremiumCard.GradientShell.UIGradient.Rotation = (PremiumCard.GradientShell.UIGradient.Rotation + 2.5) % 360
+				task.wait(0.03)
+			end
+		end
+	end)
+
+	local SliderHiddenTab = Window:Tab({
+		Title = "Sliders Hidden",
+		Icon = "sliders-horizontal",
+		Hidden = true,
+	})
+	SliderHiddenTab:Paragraph({
+		Title = "Quick Slider Controls",
+		Desc = "Opened via dashboard card.",
+	})
+
+	local DashboardTab = Window:Tab({
+		Title = "WindUI Dashboard",
+		Icon = "layout-dashboard",
+	})
+
+	local DashboardTop = DashboardTab:Groupbox({})
+	DashboardTop:Paragraph({
+		Title = "WindUI Obsidian Dashboard",
+		Desc = "Custom dashboard layout with compact-friendly groups.",
+	})
+	DashboardTop:DiscordCard({
+		Link = "https://discord.gg/ftgs-development-hub-1300692552005189632",
+	})
+	local kb = DashboardTop:Keybind({
+		Title = "Open Dashboard",
+		Value = "K",
+		Callback = function()
+			Window:SelectTab(DashboardTab.Index)
+		end,
+	})
+	if Window.UIElements.KeyBindMenu and Window.UIElements.KeyBindMenu.Refresh then
+		Window.UIElements.KeyBindMenu.Refresh()
+	end
+	Window:TabCard({
+		Parent = DashboardTab.ContainerFrame.ScrollingFrame,
+		Title = "Open Slider Controls",
+		Tab = SliderHiddenTab,
+	})
 end
 
 local Tabs = {

@@ -29,9 +29,25 @@
 ### Links
 
 - [Discord Server](https://discord.gg/ftgs-development-hub-1300692552005189632)
-- [Documentation](https://Footagesus.github.io/WindUI-Docs/)
-- [Installation](https://footagesus.github.io/WindUI-Docs/docs/installation)
+- [Documentation](./docs/index.html)
+- [Installation](./docs/index.html#installation)
 - [Example](/main_example.lua) (wip)
     ```luau
-    loadstring(game:HttpGet('https://raw.githubusercontent.com/Footagesus/WindUI/refs/heads/main/main_example.lua'))()
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/tanhoangviet/WindUI-Modded/refs/heads/main/main_example.lua'))()
     ```
+
+### Obsidian + Compact Quick APIs
+
+```luau
+local Window = WindUI:CreateWindow({
+    Theme = "Obsidian",
+    SideBarCompact = true,
+    CompactSideBarWidth = 64
+})
+
+Window:SetSidebarCompact(true)
+Window:SetCorners(16, 14)
+Window:Watermark({ Text = "WindUI Obsidian" })
+Window:Footer({ Text = "Obsidian UI • Mobile Ready" })
+Window:KeyBindMenu()
+```
