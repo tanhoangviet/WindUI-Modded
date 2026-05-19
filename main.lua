@@ -30,7 +30,7 @@ local Localization = WindUI:Localization({
 
 
 WindUI.TransparencyValue = 0.2
-WindUI:SetTheme("Dark")
+WindUI:SetTheme("Obsidian")
 
 local function gradient(text, startColor, endColor)
     local result = ""
@@ -104,7 +104,7 @@ local Window = WindUI:CreateWindow({
     Author = "loc:WELCOME",
     Folder = "WindUI_Example",
     Size = UDim2.fromOffset(580, 490),
-    Theme = "Dark",
+    Theme = "Obsidian",
     
     HidePanelBackground = false,
     NewElements = false,
@@ -131,6 +131,8 @@ local Window = WindUI:CreateWindow({
     Acrylic = false,
     HideSearchBar = false,
     SideBarWidth = 200,
+    SideBarCompact = false,
+    CompactSideBarWidth = 74,
     
     OpenButton = {
         Title = "Open .ftgs hub UI", -- can be changed
@@ -769,5 +771,4 @@ if Window:GetUnlocked() and #Window:GetUnlocked() > 0 then
     end
     
 end
-
 
