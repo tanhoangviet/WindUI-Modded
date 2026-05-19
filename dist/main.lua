@@ -9928,9 +9928,9 @@ al:SetThumbnail(ak.Thumbnail,UDim2.new(0,26,0,26))
 return ak.__type,ak
 end
 
-return af end function a.U():typeof(__modImpl())local aa=a.cache.U if not aa then aa={c=__modImpl()}a.cache.U=aa end return aa.c end end do local function __modImpl()
+preturn af end function a.V()
 
-local aa=a.c()
+local aa=a.load'c'
 local ae=aa.New
 
 local af={}
