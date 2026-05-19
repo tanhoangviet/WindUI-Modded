@@ -1659,6 +1659,39 @@ return function(Config)
 		return TabModule.New(TabConfig, Config.WindUI.UIScale)
 	end
 
+	function Window:TabCard(TabCardConfig)
+		TabCardConfig = TabCardConfig or {}
+		local linkedTab = TabCardConfig.Tab
+		local card = New("TextButton", {
+			Size = UDim2.new(1, 0, 0, 54),
+			BackgroundTransparency = 1,
+			Text = "",
+			Parent = TabCardConfig.Parent or (Window.CurrentTab and Window.CurrentTab.ContainerFrame),
+		}, {
+			Creator.NewRoundFrame(12, "Squircle", {
+				Size = UDim2.new(1, 0, 1, 0),
+				ThemeTag = { ImageColor3 = "ElementBackground" },
+				ImageTransparency = 0.08,
+			}),
+			New("TextLabel", {
+				Size = UDim2.new(1, -20, 1, 0),
+				Position = UDim2.new(0, 10, 0, 0),
+				BackgroundTransparency = 1,
+				TextXAlignment = "Left",
+				FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+				TextSize = 15,
+				Text = TabCardConfig.Title or (linkedTab and linkedTab.Title) or "Open Tab",
+				ThemeTag = { TextColor3 = "Text" },
+			}),
+		})
+		Creator.AddSignal(card.MouseButton1Click, function()
+			if linkedTab and linkedTab.Index then
+				Window:SelectTab(linkedTab.Index)
+			end
+		end)
+		return card
+	end
+
 	ApplySidebarMode()
 
 	function Window:SelectTab(Tab)
@@ -1761,6 +1794,27 @@ return function(Config)
 		end
 		list.Text = #rows > 0 and table.concat(rows, "\n") or "No keybinds yet."
 		Window.UIElements.KeyBindMenu = panel
+
+		local dragging, dragStart, startPos = false, nil, nil
+		Creator.AddSignal(panel.InputBegan, function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				dragging = true
+				dragStart = input.Position
+				startPos = panel.Position
+			end
+		end)
+		Creator.AddSignal(panel.InputEnded, function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				dragging = false
+			end
+		end)
+		Creator.AddSignal(UserInputService.InputChanged, function(input)
+			if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+				local delta = input.Position - dragStart
+				panel.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+			end
+		end)
+
 		return panel
 	end
 

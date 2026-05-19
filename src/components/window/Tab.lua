@@ -51,6 +51,7 @@ function TabModule.New(Config, UIScale)
 		CustomEmptyPage = (Config.CustomEmptyPage and next(Config.CustomEmptyPage) ~= nil) and Config.CustomEmptyPage
 			or { Icon = "lucide:frown", IconSize = 48, Title = "This tab is Empty", Desc = nil },
 		Border = Config.Border,
+		Hidden = Config.Hidden == true,
 		Selected = false,
 		Index = nil,
 		Parent = Config.Parent,
@@ -163,6 +164,11 @@ function TabModule.New(Config, UIScale)
 			}),
 		}),
 	}, true)
+
+	if Tab.Hidden then
+		Tab.UIElements.Main.Visible = false
+		Tab.UIElements.Main.Size = UDim2.new(0, 0, 0, 0)
+	end
 
 	local TextOffset = 0
 	local Icon

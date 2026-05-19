@@ -1237,6 +1237,16 @@ do
 end
 
 do
+	local SliderHiddenTab = Window:Tab({
+		Title = "Sliders Hidden",
+		Icon = "sliders-horizontal",
+		Hidden = true,
+	})
+	SliderHiddenTab:Paragraph({
+		Title = "Quick Slider Controls",
+		Desc = "Opened via dashboard card.",
+	})
+
 	local DashboardTab = Window:Tab({
 		Title = "WindUI Dashboard",
 		Icon = "layout-dashboard",
@@ -1249,6 +1259,11 @@ do
 	})
 	DashboardTop:DiscordCard({
 		Link = "https://discord.gg/ftgs-development-hub-1300692552005189632",
+	})
+	Window:TabCard({
+		Parent = DashboardTab.ContainerFrame.ScrollingFrame,
+		Title = "Open Slider Controls",
+		Tab = SliderHiddenTab,
 	})
 end
 
