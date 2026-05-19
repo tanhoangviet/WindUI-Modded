@@ -334,7 +334,8 @@ return function(Config)
 	end
 
 	local function ApplySidebarMode()
-		local targetWidth = Window.SideBarCompact and Window.CompactSideBarWidth or Window.SideBarWidth
+		local compactWidth = math.max(56, tonumber(Window.CompactSideBarWidth) or 72)
+		local targetWidth = Window.SideBarCompact and compactWidth or Window.SideBarWidth
 		Window.UIElements.SideBarContainer.Size = UDim2.new(
 			0,
 			targetWidth,
@@ -1663,18 +1664,44 @@ return function(Config)
 		TabCardConfig = TabCardConfig or {}
 		local linkedTab = TabCardConfig.Tab
 		local card = New("TextButton", {
-			Size = UDim2.new(1, 0, 0, 54),
+			Size = UDim2.new(1, -4, 0, 58),
 			BackgroundTransparency = 1,
 			Text = "",
+			AutoButtonColor = false,
 			Parent = TabCardConfig.Parent or (Window.CurrentTab and Window.CurrentTab.ContainerFrame),
 		}, {
-			Creator.NewRoundFrame(12, "Squircle", {
+			New("UIPadding", {
+				PaddingLeft = UDim.new(0, 2),
+				PaddingRight = UDim.new(0, 2),
+				PaddingTop = UDim.new(0, 2),
+				PaddingBottom = UDim.new(0, 2),
+			}),
+			Creator.NewRoundFrame(14, "Squircle", {
 				Size = UDim2.new(1, 0, 1, 0),
+				ImageTransparency = 0.15,
+				Name = "GradientShell",
+			}, {
+				New("UIGradient", {
+					Rotation = 0,
+					Color = ColorSequence.new({
+						ColorSequenceKeypoint.new(0.00, Color3.fromHex("#7C3AED")),
+						ColorSequenceKeypoint.new(0.25, Color3.fromHex("#3B82F6")),
+						ColorSequenceKeypoint.new(0.50, Color3.fromHex("#06B6D4")),
+						ColorSequenceKeypoint.new(0.75, Color3.fromHex("#22C55E")),
+						ColorSequenceKeypoint.new(1.00, Color3.fromHex("#F59E0B")),
+					}),
+				}),
+			}),
+			Creator.NewRoundFrame(12, "Squircle", {
+				Size = UDim2.new(1, -4, 1, -4),
+				Position = UDim2.new(0.5, 0, 0.5, 0),
+				AnchorPoint = Vector2.new(0.5, 0.5),
 				ThemeTag = { ImageColor3 = "ElementBackground" },
 				ImageTransparency = 0.08,
+				Name = "CardInner",
 			}),
 			New("TextLabel", {
-				Size = UDim2.new(1, -20, 1, 0),
+				Size = UDim2.new(1, -20, 1, -4),
 				Position = UDim2.new(0, 10, 0, 0),
 				BackgroundTransparency = 1,
 				TextXAlignment = "Left",
@@ -1687,6 +1714,31 @@ return function(Config)
 		Creator.AddSignal(card.MouseButton1Click, function()
 			if linkedTab and linkedTab.Index then
 				Window:SelectTab(linkedTab.Index)
+			end
+		end)
+		local speed = 18
+		local boosting = false
+		local grad = card.GradientShell.UIGradient
+		Creator.AddSignal(card.MouseEnter, function()
+			boosting = true
+		end)
+		Creator.AddSignal(card.MouseLeave, function()
+			boosting = false
+		end)
+		Creator.AddSignal(card.InputBegan, function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				boosting = true
+			end
+		end)
+		Creator.AddSignal(card.InputEnded, function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				boosting = false
+			end
+		end)
+		task.spawn(function()
+			while card.Parent do
+				grad.Rotation = (grad.Rotation + (boosting and speed * 2.4 or speed) * 0.04) % 360
+				task.wait(0.04)
 			end
 		end)
 		return card
