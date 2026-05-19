@@ -479,6 +479,11 @@ function TabModule.New(Config, UIScale)
 		Tab
 	)
 
+	function Tab:Groupbox(GroupboxConfig)
+		GroupboxConfig = GroupboxConfig or {}
+		return Tab:Group(GroupboxConfig)
+	end
+
 	function Tab:LockAll()
 		--print("LockAll called, number of elements: " .. #self.Elements)
 		for _, element in next, Window.AllElements do

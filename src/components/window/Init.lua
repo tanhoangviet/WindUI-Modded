@@ -1695,7 +1695,9 @@ return function(Config)
 				TextColor3 = "Text",
 			},
 			TextTransparency = 0.4,
-			Parent = Window.UIElements.Main.Main.Topbar.Center,
+			Position = WatermarkConfig.Position or UDim2.new(0, 14, 0, 10),
+			Parent = Config.WindUI.ScreenGui,
+			ZIndex = 9999,
 		})
 
 		Window.UIElements.Watermark = label
@@ -1706,10 +1708,12 @@ return function(Config)
 		KeybindConfig = KeybindConfig or {}
 		local panel = New("Frame", {
 			Size = UDim2.new(0, KeybindConfig.Width or 220, 0, KeybindConfig.Height or 150),
-			Position = KeybindConfig.Position or UDim2.new(1, -14, 0, Window.Topbar.Height + 12),
-			AnchorPoint = Vector2.new(1, 0),
+			Position = KeybindConfig.Position
+				or (Window.IsPC and UDim2.new(1, -14, 0, Window.Topbar.Height + 12) or UDim2.new(1, -10, 1, -10)),
+			AnchorPoint = Window.IsPC and Vector2.new(1, 0) or Vector2.new(1, 1),
 			BackgroundTransparency = 1,
-			Parent = Window.UIElements.Main.Main,
+			Parent = Config.WindUI.ScreenGui,
+			ZIndex = 9999,
 		}, {
 			Creator.NewRoundFrame(10, "Squircle", {
 				Size = UDim2.new(1, 0, 1, 0),

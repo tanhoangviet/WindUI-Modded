@@ -285,9 +285,7 @@ do
 		Border = true,
 	})
 
-		local AboutSection = AboutTab:Section({
-			Title = "About WindUI",
-		})
+		local AboutSection = AboutTab:Groupbox({})
 
 		AboutSection:DiscordCard({
 			Link = "https://discord.gg/ftgs-development-hub-1300692552005189632",
@@ -301,20 +299,17 @@ do
 
 	AboutSection:Space({ Columns = 3 })
 
-	AboutSection:Section({
-		Title = "What is WindUI?",
-		TextSize = 24,
-		FontWeight = Enum.FontWeight.SemiBold,
-	})
+		AboutSection:Paragraph({
+			Title = "What is WindUI?",
+			Desc = "Overview",
+		})
 
 	AboutSection:Space()
 
-	AboutSection:Section({
-		Title = "WindUI is a stylish, open-source UI (User Interface) library specifically designed for Roblox Script Hubs.\nDeveloped by Footagesus (.ftgs, Footages).\nIt aims to provide developers with a modern, customizable, and easy-to-use toolkit for creating visually appealing interfaces within Roblox.\nThe project is primarily written in Lua (Luau), the scripting language used in Roblox.",
-		TextSize = 18,
-		TextTransparency = 0.35,
-		FontWeight = Enum.FontWeight.Medium,
-	})
+		AboutSection:Paragraph({
+			Title = "WindUI is a stylish, open-source UI library for Roblox script hubs.",
+			Desc = "Developed by Footagesus (.ftgs). Focused on modern customizable interfaces in Luau.",
+		})
 
 	AboutTab:Space({ Columns = 4 })
 
@@ -1239,6 +1234,22 @@ do
 			Color = "Red",
 		})
 	end
+end
+
+do
+	local DashboardTab = Window:Tab({
+		Title = "WindUI Dashboard",
+		Icon = "layout-dashboard",
+	})
+
+	local DashboardTop = DashboardTab:Groupbox({})
+	DashboardTop:Paragraph({
+		Title = "WindUI Obsidian Dashboard",
+		Desc = "Custom dashboard layout with compact-friendly groups.",
+	})
+	DashboardTop:DiscordCard({
+		Link = "https://discord.gg/ftgs-development-hub-1300692552005189632",
+	})
 end
 
 local Tabs = {
