@@ -9,7 +9,7 @@
     To view the source code, see the `src/` folder on the official GitHub repository.
     
     Author: Footagesus (Footages, .ftgs, oftgs)
-    Github: https://github.com/Footagesus/WindUI
+    Github: https://github.com/tanhoangviet/WindUI-Modded
     Discord: https://discord.gg/ftgs-development-hub-1300692552005189632
     License: MIT
 ]]
@@ -2120,7 +2120,7 @@ return[[
     "name": "windui",
     "version": "1.6.65",
     "main": "./dist/main.lua",
-    "repository": "https://github.com/Footagesus/WindUI",
+    "repository": "https://github.com/tanhoangviet/WindUI-Modded",
     "discord": "https://discord.gg/ftgs-development-hub-1300692552005189632",
     "author": "Footagesus",
     "description": "Roblox UI Library for scripts",
@@ -10398,6 +10398,7 @@ TabTitleAlign=an.TabTitleAlign or"Left",
 CustomEmptyPage=(an.CustomEmptyPage and next(an.CustomEmptyPage)~=nil)and an.CustomEmptyPage
 or{Icon="lucide:frown",IconSize=48,Title="This tab is Empty",Desc=nil},
 Border=an.Border,
+Hidden=an.Hidden==true,
 Selected=false,
 Index=nil,
 Parent=an.Parent,
@@ -10510,6 +10511,11 @@ PaddingBottom=UDim.new(0,ap.TabPaddingY),
 }),
 }),
 },true)
+
+if ap.Hidden then
+ap.UIElements.Main.Visible=false
+ap.UIElements.Main.Size=UDim2.new(0,0,0,0)
+end
 
 local ar=0
 local as
@@ -10825,6 +10831,11 @@ ay,
 ao,
 ap
 )
+
+function ap.Groupbox(az,aA)
+aA=aA or{}
+return ap:Group(aA)
+end
 
 function ap.LockAll(az)
 
