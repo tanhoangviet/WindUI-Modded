@@ -109,6 +109,10 @@ local Window = WindUI:CreateWindow({
 -- Runtime UI helpers (new APIs)
 Window:SetSidebarCompact(false)
 Window:SetCorners(16, 14)
+Window:Watermark({
+	Text = "WindUI Obsidian • Example",
+})
+Window:KeyBindMenu()
 
 --createPopup()
 

@@ -1568,6 +1568,9 @@ return function(Config)
 	function Window:SetSidebarCompact(state)
 		Window.SideBarCompact = state == true
 		ApplySidebarMode()
+		if TabModule and TabModule.SetCompactMode then
+			TabModule:SetCompactMode(Window.SideBarCompact)
+		end
 		return Window
 	end
 
@@ -1676,6 +1679,85 @@ return function(Config)
 		GroupboxConfig = GroupboxConfig or {}
 		GroupboxConfig.Title = GroupboxConfig.Title or "Groupbox"
 		return Window:Section(GroupboxConfig)
+	end
+
+	function Window:Watermark(WatermarkConfig)
+		WatermarkConfig = WatermarkConfig or {}
+		local text = WatermarkConfig.Text or (Window.Title .. " • " .. (Window.Author or "WindUI"))
+
+		local label = New("TextLabel", {
+			Text = text,
+			AutomaticSize = "XY",
+			BackgroundTransparency = 1,
+			TextSize = 13,
+			FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+			ThemeTag = {
+				TextColor3 = "Text",
+			},
+			TextTransparency = 0.4,
+			Parent = Window.UIElements.Main.Main.Topbar.Center,
+		})
+
+		Window.UIElements.Watermark = label
+		return label
+	end
+
+	function Window:KeyBindMenu(KeybindConfig)
+		KeybindConfig = KeybindConfig or {}
+		local panel = New("Frame", {
+			Size = UDim2.new(0, KeybindConfig.Width or 220, 0, KeybindConfig.Height or 150),
+			Position = KeybindConfig.Position or UDim2.new(1, -14, 0, Window.Topbar.Height + 12),
+			AnchorPoint = Vector2.new(1, 0),
+			BackgroundTransparency = 1,
+			Parent = Window.UIElements.Main.Main,
+		}, {
+			Creator.NewRoundFrame(10, "Squircle", {
+				Size = UDim2.new(1, 0, 1, 0),
+				ThemeTag = {
+					ImageColor3 = "ElementBackground",
+				},
+				ImageTransparency = 0.08,
+			}),
+		})
+
+		local title = New("TextLabel", {
+			Text = KeybindConfig.Title or "Keybinds",
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, -16, 0, 26),
+			Position = UDim2.new(0, 8, 0, 6),
+			FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+			TextSize = 14,
+			TextXAlignment = "Left",
+			ThemeTag = { TextColor3 = "Text" },
+			Parent = panel,
+		})
+
+		local list = New("TextLabel", {
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, -16, 1, -36),
+			Position = UDim2.new(0, 8, 0, 30),
+			FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+			TextSize = 12,
+			TextXAlignment = "Left",
+			TextYAlignment = "Top",
+			TextWrapped = true,
+			ThemeTag = { TextColor3 = "Text" },
+			TextTransparency = 0.3,
+			Parent = panel,
+		})
+
+		local rows = {}
+		for _, element in next, Window.AllElements do
+			if element.__type == "Keybind" and element.Title and element.Value then
+				table.insert(rows, ("%s [%s]"):format(element.Title, tostring(element.Value)))
+			end
+		end
+		if Window.ToggleKey then
+			table.insert(rows, ("Toggle Window [%s]"):format(tostring(Window.ToggleKey.Name)))
+		end
+		list.Text = #rows > 0 and table.concat(rows, "\n") or "No keybinds yet."
+		Window.UIElements.KeyBindMenu = panel
+		return panel
 	end
 
 	function Window:IsResizable(v)
