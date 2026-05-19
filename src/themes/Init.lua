@@ -29,6 +29,34 @@ return function(WindUI, Creator)
 			ElementBackgroundTransparency = 0,
 		},
 
+		Obsidian = {
+			Name = "Obsidian",
+
+			Accent = Color3.fromHex("#24262A"),
+			Dialog = Color3.fromHex("#1F2124"),
+			Outline = Color3.fromHex("#FFFFFF"),
+			Text = Color3.fromHex("#D6D9DF"),
+			Placeholder = Color3.fromHex("#8B909A"),
+			Background = Color3.fromHex("#15171A"),
+			Button = Color3.fromHex("#5A5F6B"),
+			Icon = Color3.fromHex("#A2A8B3"),
+			Toggle = Color3.fromHex("#7C3AED"),
+			Slider = Color3.fromHex("#7C3AED"),
+			Checkbox = Color3.fromHex("#7C3AED"),
+
+			PanelBackground = Color3.fromHex("#202226"),
+			PanelBackgroundTransparency = 0.12,
+
+			SliderIcon = Color3.fromHex("#8B909A"),
+			Primary = Color3.fromHex("#7C3AED"),
+
+			LabelBackground = Color3.fromHex("#0F1113"),
+			LabelBackgroundTransparency = 0.2,
+
+			ElementBackground = Color3.fromHex("#2A2D33"),
+			ElementBackgroundTransparency = 0,
+		},
+
 		Light = {
 			Name = "Light",
 

@@ -57,6 +57,8 @@ return function(Config)
 		HideSearchBar = Config.HideSearchBar ~= false,
 		ScrollBarEnabled = Config.ScrollBarEnabled or false,
 		SideBarWidth = Config.SideBarWidth or 200,
+		SideBarCompact = Config.SideBarCompact or false,
+		CompactSideBarWidth = Config.CompactSideBarWidth or 72,
 		Acrylic = Config.Acrylic or false,
 		NewElements = Config.NewElements or false,
 		IgnoreAlerts = Config.IgnoreAlerts or false,
@@ -320,6 +322,26 @@ return function(Config)
 		Window.IsPC = true
 	else
 		Window.IsPC = nil
+	end
+
+	if Window.IsPC == false then
+		Window.MinSize = Vector2.new(340, 280)
+		Window.MaxSize = Vector2.new(900, 760)
+		Window.UIPadding = 10
+		Window.SideBarWidth = math.max(150, math.floor(Window.SideBarWidth * 0.85))
+		Window.Topbar.Height = math.max(Window.Topbar.Height, 56)
+		Window.Gap = 7
+	end
+
+	local function ApplySidebarMode()
+		local targetWidth = Window.SideBarCompact and Window.CompactSideBarWidth or Window.SideBarWidth
+		Window.UIElements.SideBarContainer.Size = UDim2.new(
+			0,
+			targetWidth,
+			1,
+			Window.User.Enabled and -Window.Topbar.Height - 42 - (Window.UIPadding * 2) or -Window.Topbar.Height
+		)
+		Window.UIElements.MainBar.Size = UDim2.new(1, -targetWidth, 1, -Window.Topbar.Height)
 	end
 
 	--Window.IsPC = true
@@ -1543,12 +1565,27 @@ return function(Config)
 		return Window
 	end
 
+	function Window:SetSidebarCompact(state)
+		Window.SideBarCompact = state == true
+		ApplySidebarMode()
+		if TabModule and TabModule.SetCompactMode then
+			TabModule:SetCompactMode(Window.SideBarCompact)
+		end
+		return Window
+	end
+
+	function Window:SetCorners(radius, elementRadius)
+		Window.UICorner = math.clamp(tonumber(radius) or Window.UICorner, 6, 32)
+		Window.ElementConfig.UICorner = math.clamp(tonumber(elementRadius) or Window.ElementConfig.UICorner, 6, 32)
+		return Window
+	end
+
 	function Window:SetCurrentConfig(ConfigModule)
 		Window.CurrentConfig = ConfigModule
 	end
 
 	do
-		local Margin = 40
+		local Margin = Window.IsPC and 40 or 14
 		local ViewportSize = CurrentCamera.ViewportSize
 		local WindowSize = Window.UIElements.Main.AbsoluteSize
 
@@ -1561,7 +1598,7 @@ return function(Config)
 
 			local RequiredScale = math.min(ScaleX, ScaleY)
 
-			local MinScale = 0.3
+			local MinScale = Window.IsPC and 0.3 or 0.56
 			local MaxScale = 1.0
 
 			local FinalScale = math.clamp(RequiredScale, MinScale, MaxScale)
@@ -1622,6 +1659,8 @@ return function(Config)
 		return TabModule.New(TabConfig, Config.WindUI.UIScale)
 	end
 
+	ApplySidebarMode()
+
 	function Window:SelectTab(Tab)
 		TabModule:SelectTab(Tab)
 	end
@@ -1634,6 +1673,91 @@ return function(Config)
 			Config.WindUI.UIScale,
 			Window
 		)
+	end
+
+	function Window:Groupbox(GroupboxConfig)
+		GroupboxConfig = GroupboxConfig or {}
+		GroupboxConfig.Title = GroupboxConfig.Title or "Groupbox"
+		return Window:Section(GroupboxConfig)
+	end
+
+	function Window:Watermark(WatermarkConfig)
+		WatermarkConfig = WatermarkConfig or {}
+		local text = WatermarkConfig.Text or (Window.Title .. " • " .. (Window.Author or "WindUI"))
+
+		local label = New("TextLabel", {
+			Text = text,
+			AutomaticSize = "XY",
+			BackgroundTransparency = 1,
+			TextSize = 13,
+			FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+			ThemeTag = {
+				TextColor3 = "Text",
+			},
+			TextTransparency = 0.4,
+			Parent = Window.UIElements.Main.Main.Topbar.Center,
+		})
+
+		Window.UIElements.Watermark = label
+		return label
+	end
+
+	function Window:KeyBindMenu(KeybindConfig)
+		KeybindConfig = KeybindConfig or {}
+		local panel = New("Frame", {
+			Size = UDim2.new(0, KeybindConfig.Width or 220, 0, KeybindConfig.Height or 150),
+			Position = KeybindConfig.Position or UDim2.new(1, -14, 0, Window.Topbar.Height + 12),
+			AnchorPoint = Vector2.new(1, 0),
+			BackgroundTransparency = 1,
+			Parent = Window.UIElements.Main.Main,
+		}, {
+			Creator.NewRoundFrame(10, "Squircle", {
+				Size = UDim2.new(1, 0, 1, 0),
+				ThemeTag = {
+					ImageColor3 = "ElementBackground",
+				},
+				ImageTransparency = 0.08,
+			}),
+		})
+
+		local title = New("TextLabel", {
+			Text = KeybindConfig.Title or "Keybinds",
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, -16, 0, 26),
+			Position = UDim2.new(0, 8, 0, 6),
+			FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
+			TextSize = 14,
+			TextXAlignment = "Left",
+			ThemeTag = { TextColor3 = "Text" },
+			Parent = panel,
+		})
+
+		local list = New("TextLabel", {
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, -16, 1, -36),
+			Position = UDim2.new(0, 8, 0, 30),
+			FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+			TextSize = 12,
+			TextXAlignment = "Left",
+			TextYAlignment = "Top",
+			TextWrapped = true,
+			ThemeTag = { TextColor3 = "Text" },
+			TextTransparency = 0.3,
+			Parent = panel,
+		})
+
+		local rows = {}
+		for _, element in next, Window.AllElements do
+			if element.__type == "Keybind" and element.Title and element.Value then
+				table.insert(rows, ("%s [%s]"):format(element.Title, tostring(element.Value)))
+			end
+		end
+		if Window.ToggleKey then
+			table.insert(rows, ("Toggle Window [%s]"):format(tostring(Window.ToggleKey.Name)))
+		end
+		list.Text = #rows > 0 and table.concat(rows, "\n") or "No keybinds yet."
+		Window.UIElements.KeyBindMenu = panel
+		return panel
 	end
 
 	function Window:IsResizable(v)
