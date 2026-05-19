@@ -3,6 +3,8 @@ local cloneref = (cloneref or clonereference or function(instance)
 end)
 
 local HttpService = cloneref(game:GetService("HttpService"))
+local Creator = require("../modules/Creator")
+local New = Creator.New
 
 local Element = {}
 
@@ -76,8 +78,38 @@ function Element:New(Config)
 	end
 
 	ElementFrame:SetTitle(Card.Title)
-	ElementFrame:SetDesc((Card.Desc or "") .. "\n" .. tostring(Card.Link or ""))
-	ElementFrame:SetThumbnail(Card.Thumbnail, UDim2.new(0, 26, 0, 26))
+	ElementFrame:SetDesc(Card.Desc or "")
+	ElementFrame:SetThumbnail(Card.Thumbnail, UDim2.new(0, 30, 0, 30))
+
+	local LinkBar = New("TextButton", {
+		Size = UDim2.new(1, 0, 0, 32),
+		BackgroundTransparency = 1,
+		Text = "",
+		Parent = ElementFrame.UIElements.Container,
+	}, {
+		Creator.NewRoundFrame(8, "Squircle", {
+			Size = UDim2.new(1, 0, 1, 0),
+			ThemeTag = { ImageColor3 = "ElementBackground" },
+			ImageTransparency = 0.2,
+		}),
+		New("TextLabel", {
+			Size = UDim2.new(1, -16, 1, 0),
+			Position = UDim2.new(0, 8, 0, 0),
+			BackgroundTransparency = 1,
+			TextXAlignment = "Left",
+			TextSize = 13,
+			Text = tostring(Card.Link or ""),
+			ThemeTag = { TextColor3 = "Text" },
+			TextTransparency = 0.35,
+			FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+		}),
+	})
+
+	Creator.AddSignal(LinkBar.MouseButton1Click, function()
+		if setclipboard and Card.Link and Card.Link ~= "" then
+			setclipboard(Card.Link)
+		end
+	end)
 
 	return Card.__type, Card
 end

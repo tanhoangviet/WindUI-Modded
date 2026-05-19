@@ -1309,6 +1309,9 @@ do
 	Window:TabCard({
 		Parent = DashboardTab.ContainerFrame.ScrollingFrame,
 		Title = "Open Slider Controls",
+		Description = "Quick jump to slider workspace",
+		BottomTitle = "Premium Navigation",
+		Thumbnail = "https://i.imgur.com/7YwXj8x.png",
 		Tab = SliderHiddenTab,
 	})
 end

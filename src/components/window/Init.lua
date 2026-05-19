@@ -1673,7 +1673,7 @@ return function(Config)
 		TabCardConfig = TabCardConfig or {}
 		local linkedTab = TabCardConfig.Tab
 		local card = New("TextButton", {
-			Size = UDim2.new(1, -4, 0, 58),
+			Size = UDim2.new(1, -4, 0, 78),
 			BackgroundTransparency = 1,
 			Text = "",
 			AutoButtonColor = false,
@@ -1710,8 +1710,8 @@ return function(Config)
 				Name = "CardInner",
 			}),
 			New("TextLabel", {
-				Size = UDim2.new(1, -20, 1, -4),
-				Position = UDim2.new(0, 10, 0, 0),
+				Size = UDim2.new(1, -20, 0, 26),
+				Position = UDim2.new(0, 10, 0, 8),
 				BackgroundTransparency = 1,
 				TextXAlignment = "Left",
 				FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
@@ -1719,7 +1719,56 @@ return function(Config)
 				Text = TabCardConfig.Title or (linkedTab and linkedTab.Title) or "Open Tab",
 				ThemeTag = { TextColor3 = "Text" },
 			}),
+			New("TextLabel", {
+				Size = UDim2.new(1, -20, 0, 18),
+				Position = UDim2.new(0, 10, 0, 34),
+				BackgroundTransparency = 1,
+				TextXAlignment = "Left",
+				FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+				TextSize = 12,
+				Text = TabCardConfig.Description or "Tap to navigate",
+				ThemeTag = { TextColor3 = "Text" },
+				TextTransparency = 0.35,
+			}),
+			New("Frame", {
+				Size = UDim2.new(1, 0, 0, 20),
+				Position = UDim2.new(0, 0, 1, -22),
+				BackgroundTransparency = 1,
+			}, {
+				Creator.NewRoundFrame(8, "Squircle", {
+					Size = UDim2.new(1, -8, 1, 0),
+					Position = UDim2.new(0.5, 0, 0.5, 0),
+					AnchorPoint = Vector2.new(0.5, 0.5),
+					ThemeTag = { ImageColor3 = "Background" },
+					ImageTransparency = 0.22,
+				}),
+				New("TextLabel", {
+					Size = UDim2.new(1, -10, 1, 0),
+					Position = UDim2.new(0, 8, 0, 0),
+					BackgroundTransparency = 1,
+					TextXAlignment = "Left",
+					TextSize = 11,
+					FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+					Text = TabCardConfig.BottomTitle or "Navigation",
+					ThemeTag = { TextColor3 = "Text" },
+					TextTransparency = 0.4,
+				}),
+			}),
 		})
+		if TabCardConfig.Thumbnail then
+			local thumb = Creator.Image(
+				TabCardConfig.Thumbnail,
+				"TabCardThumb",
+				8,
+				Window.Folder,
+				"TabCard",
+				false
+			)
+			thumb.Size = UDim2.new(0, 28, 0, 28)
+			thumb.Position = UDim2.new(1, -8, 0, 8)
+			thumb.AnchorPoint = Vector2.new(1, 0)
+			thumb.Parent = card
+		end
 		Creator.AddSignal(card.MouseButton1Click, function()
 			if linkedTab and linkedTab.Index then
 				Window:SelectTab(linkedTab.Index)
@@ -1926,6 +1975,13 @@ return function(Config)
 							Size = UDim2.new(1, 0, 1, 0),
 							ThemeTag = { ImageColor3 = "ElementBackground" },
 							ImageTransparency = 0.14,
+						}),
+						Creator.NewRoundFrame(999, "Squircle", {
+							Size = UDim2.new(0, 16, 0, 16),
+							Position = UDim2.new(1, -10, 0.5, 0),
+							AnchorPoint = Vector2.new(1, 0.5),
+							ThemeTag = { ImageColor3 = "Toggle" },
+							ImageTransparency = 0.05,
 						}),
 					})
 				end
