@@ -10398,6 +10398,7 @@ TabTitleAlign=an.TabTitleAlign or"Left",
 CustomEmptyPage=(an.CustomEmptyPage and next(an.CustomEmptyPage)~=nil)and an.CustomEmptyPage
 or{Icon="lucide:frown",IconSize=48,Title="This tab is Empty",Desc=nil},
 Border=an.Border,
+Hidden=an.Hidden==true,
 Selected=false,
 Index=nil,
 Parent=an.Parent,
@@ -10510,6 +10511,11 @@ PaddingBottom=UDim.new(0,ap.TabPaddingY),
 }),
 }),
 },true)
+
+if ap.Hidden then
+ap.UIElements.Main.Visible=false
+ap.UIElements.Main.Size=UDim2.new(0,0,0,0)
+end
 
 local ar=0
 local as
@@ -10825,6 +10831,11 @@ ay,
 ao,
 ap
 )
+
+function ap.Groupbox(az,aA)
+aA=aA or{}
+return ap:Group(aA)
+end
 
 function ap.LockAll(az)
 
