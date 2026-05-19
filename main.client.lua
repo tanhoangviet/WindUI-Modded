@@ -1240,6 +1240,39 @@ do
 end
 
 do
+	local PremiumTab = Window:Tab({
+		Title = "Premium",
+		Icon = "crown",
+	})
+
+	local PremiumGroup = PremiumTab:Groupbox({})
+	local PremiumCard = Window:TabCard({
+		Parent = PremiumTab.ContainerFrame.ScrollingFrame,
+		Title = "Premium Gold Mode",
+		Tab = PremiumTab,
+	})
+	PremiumGroup:Paragraph({
+		Title = "Premium Page",
+		Desc = "Golden gradient + shiny animation style.",
+	})
+	PremiumGroup:Button({
+		Title = "Golden Action",
+		Callback = function() end,
+	})
+	PremiumGroup:Input({
+		Title = "Premium Input",
+		Placeholder = "Type here...",
+		Callback = function() end,
+	})
+	task.spawn(function()
+		if PremiumCard and PremiumCard.GradientShell and PremiumCard.GradientShell.UIGradient then
+			while PremiumCard.Parent do
+				PremiumCard.GradientShell.UIGradient.Rotation = (PremiumCard.GradientShell.UIGradient.Rotation + 2.5) % 360
+				task.wait(0.03)
+			end
+		end
+	end)
+
 	local SliderHiddenTab = Window:Tab({
 		Title = "Sliders Hidden",
 		Icon = "sliders-horizontal",

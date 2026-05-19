@@ -1880,6 +1880,59 @@ return function(Config)
 			list.Text = #rows > 0 and table.concat(rows, "\n") or "No keybinds yet."
 		end
 		refresh()
+
+		if Window.IsPC == false or KeybindConfig.MobileButtons then
+			list.Visible = false
+			local mobileList = New("Frame", {
+				BackgroundTransparency = 1,
+				Size = UDim2.new(1, -16, 1, -36),
+				Position = UDim2.new(0, 8, 0, 30),
+				Parent = panel,
+			}, {
+				New("UIListLayout", {
+					Padding = UDim.new(0, 6),
+					SortOrder = "LayoutOrder",
+				}),
+			})
+
+			local function renderMobileButtons()
+				for _, child in next, mobileList:GetChildren() do
+					if child:IsA("TextButton") then
+						child:Destroy()
+					end
+				end
+				local rows = getRows()
+				if #rows == 0 then
+					New("TextLabel", {
+						Text = "No keybinds yet.",
+						BackgroundTransparency = 1,
+						Size = UDim2.new(1, 0, 0, 24),
+						ThemeTag = { TextColor3 = "Text" },
+						TextTransparency = 0.35,
+						Parent = mobileList,
+					})
+					return
+				end
+				for _, row in next, rows do
+					New("TextButton", {
+						Text = row,
+						AutoButtonColor = false,
+						Size = UDim2.new(1, 0, 0, 28),
+						BackgroundTransparency = 1,
+						ThemeTag = { TextColor3 = "Text" },
+						Parent = mobileList,
+					}, {
+						Creator.NewRoundFrame(8, "Squircle", {
+							Size = UDim2.new(1, 0, 1, 0),
+							ThemeTag = { ImageColor3 = "ElementBackground" },
+							ImageTransparency = 0.14,
+						}),
+					})
+				end
+			end
+			renderMobileButtons()
+			refresh = renderMobileButtons
+		end
 		local keybindMenu = {
 			Frame = panel,
 			Refresh = refresh,
