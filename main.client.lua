@@ -1271,7 +1271,7 @@ do
 		end,
 	})
 	if Window.UIElements.KeyBindMenu and Window.UIElements.KeyBindMenu.Refresh then
-		Window.UIElements.KeyBindMenu:Refresh()
+		Window.UIElements.KeyBindMenu.Refresh()
 	end
 	Window:TabCard({
 		Parent = DashboardTab.ContainerFrame.ScrollingFrame,

@@ -1880,7 +1880,11 @@ return function(Config)
 			list.Text = #rows > 0 and table.concat(rows, "\n") or "No keybinds yet."
 		end
 		refresh()
-		Window.UIElements.KeyBindMenu = panel
+		local keybindMenu = {
+			Frame = panel,
+			Refresh = refresh,
+		}
+		Window.UIElements.KeyBindMenu = keybindMenu
 
 		local dragging, dragStart, startPos = false, nil, nil
 		Creator.AddSignal(panel.InputBegan, function(input)
@@ -1901,9 +1905,7 @@ return function(Config)
 				panel.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 			end
 		end)
-		panel.Refresh = refresh
-
-		return panel
+		return keybindMenu
 	end
 
 	function Window:IsResizable(v)
