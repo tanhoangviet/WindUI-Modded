@@ -13,6 +13,7 @@ return {
 		Divider = require("./Divider"),
 		Space = require("./Space"),
 		Image = require("./Image"),
+		DiscordCard = require("./DiscordCard"),
 		Group = require("./Group"),
 		HStack = require("./HStack"),
 		VStack = require("./VStack"),
