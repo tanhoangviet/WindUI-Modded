@@ -343,6 +343,15 @@ return function(Config)
 			Window.User.Enabled and -Window.Topbar.Height - 42 - (Window.UIPadding * 2) or -Window.Topbar.Height
 		)
 		Window.UIElements.MainBar.Size = UDim2.new(1, -targetWidth, 1, -Window.Topbar.Height)
+
+		if Window.UIElements.SideBar and Window.UIElements.SideBar.UIPadding then
+			Window.UIElements.SideBar.UIPadding.PaddingLeft = UDim.new(0, Window.SideBarCompact and 2 or (Window.UIPadding / 2))
+			Window.UIElements.SideBar.UIPadding.PaddingRight =
+				UDim.new(0, Window.SideBarCompact and 2 or (Window.UIPadding / 2))
+		end
+		if Window.UIElements.SideBar and Window.UIElements.SideBar.Frame and Window.UIElements.SideBar.Frame.UIListLayout then
+			Window.UIElements.SideBar.Frame.UIListLayout.Padding = UDim.new(0, Window.SideBarCompact and 3 or Window.Gap)
+		end
 	end
 
 	--Window.IsPC = true
@@ -1789,6 +1798,25 @@ return function(Config)
 		return label
 	end
 
+	function Window:Footer(FooterConfig)
+		FooterConfig = FooterConfig or {}
+		local footer = New("TextLabel", {
+			Text = FooterConfig.Text or ("WindUI • " .. (Window.Footer.Text or "Obsidian")),
+			Size = UDim2.new(1, -16, 0, 18),
+			Position = FooterConfig.Position or UDim2.new(0, 8, 1, -24),
+			BackgroundTransparency = 1,
+			TextSize = 12,
+			FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+			TextXAlignment = "Right",
+			ThemeTag = { TextColor3 = "Text" },
+			TextTransparency = 0.5,
+			Parent = Window.UIElements.Main.Main,
+			ZIndex = 10,
+		})
+		Window.UIElements.Footer = footer
+		return footer
+	end
+
 	function Window:KeyBindMenu(KeybindConfig)
 		KeybindConfig = KeybindConfig or {}
 		local panel = New("Frame", {
@@ -1835,16 +1863,23 @@ return function(Config)
 			Parent = panel,
 		})
 
-		local rows = {}
-		for _, element in next, Window.AllElements do
-			if element.__type == "Keybind" and element.Title and element.Value then
-				table.insert(rows, ("%s [%s]"):format(element.Title, tostring(element.Value)))
+		local function getRows()
+			local rows = {}
+			for _, element in next, Window.AllElements do
+				if element.__type == "Keybind" and element.Title and element.Value then
+					table.insert(rows, ("%s [%s]"):format(element.Title, tostring(element.Value)))
+				end
 			end
+			if Window.ToggleKey then
+				table.insert(rows, ("Toggle Window [%s]"):format(tostring(Window.ToggleKey.Name)))
+			end
+			return rows
 		end
-		if Window.ToggleKey then
-			table.insert(rows, ("Toggle Window [%s]"):format(tostring(Window.ToggleKey.Name)))
+		local function refresh()
+			local rows = getRows()
+			list.Text = #rows > 0 and table.concat(rows, "\n") or "No keybinds yet."
 		end
-		list.Text = #rows > 0 and table.concat(rows, "\n") or "No keybinds yet."
+		refresh()
 		Window.UIElements.KeyBindMenu = panel
 
 		local dragging, dragStart, startPos = false, nil, nil
@@ -1866,6 +1901,7 @@ return function(Config)
 				panel.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 			end
 		end)
+		panel.Refresh = refresh
 
 		return panel
 	end

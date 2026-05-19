@@ -113,6 +113,9 @@ Window:Watermark({
 	Text = "WindUI Obsidian • Example",
 })
 Window:KeyBindMenu()
+Window:Footer({
+	Text = "Obsidian UI • Mobile Ready",
+})
 
 --createPopup()
 
@@ -1260,6 +1263,16 @@ do
 	DashboardTop:DiscordCard({
 		Link = "https://discord.gg/ftgs-development-hub-1300692552005189632",
 	})
+	local kb = DashboardTop:Keybind({
+		Title = "Open Dashboard",
+		Value = "K",
+		Callback = function()
+			Window:SelectTab(DashboardTab.Index)
+		end,
+	})
+	if Window.UIElements.KeyBindMenu and Window.UIElements.KeyBindMenu.Refresh then
+		Window.UIElements.KeyBindMenu:Refresh()
+	end
 	Window:TabCard({
 		Parent = DashboardTab.ContainerFrame.ScrollingFrame,
 		Title = "Open Slider Controls",
