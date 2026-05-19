@@ -114,6 +114,26 @@ function Section.New(SectionConfig, Parent, Folder, UIScale, Window)
             }),
         })
     })
+
+    if Window.SideBarCompact then
+        SectionModule.HeaderSize = 30
+        SectionFrame.Size = UDim2.new(1, 0, 0, SectionModule.HeaderSize)
+        SectionFrame.TextButton.Size = UDim2.new(1, 0, 0, SectionModule.HeaderSize)
+
+        if IconFrame then
+            IconFrame.Visible = false
+        end
+
+        for _, child in next, SectionFrame.TextButton:GetChildren() do
+            if child:IsA("TextLabel") then
+                child.Visible = false
+            end
+        end
+
+        ChevronIconFrame.Visible = true
+        ChevronIconFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+        ChevronIconFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+    end
     
     
     function SectionModule:Tab(TabConfig)

@@ -51,6 +51,7 @@ function TabModule.New(Config, UIScale)
 		CustomEmptyPage = (Config.CustomEmptyPage and next(Config.CustomEmptyPage) ~= nil) and Config.CustomEmptyPage
 			or { Icon = "lucide:frown", IconSize = 48, Title = "This tab is Empty", Desc = nil },
 		Border = Config.Border,
+		Hidden = Config.Hidden == true,
 		Selected = false,
 		Index = nil,
 		Parent = Config.Parent,
@@ -164,6 +165,11 @@ function TabModule.New(Config, UIScale)
 		}),
 	}, true)
 
+	if Tab.Hidden then
+		Tab.UIElements.Main.Visible = false
+		Tab.UIElements.Main.Size = UDim2.new(0, 0, 0, 0)
+	end
+
 	local TextOffset = 0
 	local Icon
 	local Icon2
@@ -247,6 +253,36 @@ function TabModule.New(Config, UIScale)
 		--Tab.UIElements.Main.Frame.TextLabel.Size = UDim2.new(1,-30,0,0)
 		--Tab.UIElements.Icon = Icon
 	end
+
+	local function applyCompactMode(isCompact)
+		if isCompact then
+			Tab.UIElements.Main.Size = UDim2.new(1, -7, 0, 38)
+			Tab.UIElements.Main.AutomaticSize = "None"
+			Tab.UIElements.Main.Frame.AutomaticSize = "None"
+			Tab.UIElements.Main.Frame.Size = UDim2.new(1, 0, 1, 0)
+			Tab.UIElements.Main.Frame.TextLabel.Visible = false
+			Tab.UIElements.Main.Frame.UIListLayout.HorizontalAlignment = "Center"
+			Tab.UIElements.Main.Frame.UIPadding.PaddingLeft = UDim.new(0, 0)
+			Tab.UIElements.Main.Frame.UIPadding.PaddingRight = UDim.new(0, 0)
+			if Tab.UIElements.Icon then
+				Tab.UIElements.Icon.Size = UDim2.new(0, 18, 0, 18)
+			end
+		else
+			Tab.UIElements.Main.Size = UDim2.new(1, -7, 0, 0)
+			Tab.UIElements.Main.AutomaticSize = "Y"
+			Tab.UIElements.Main.Frame.AutomaticSize = "Y"
+			Tab.UIElements.Main.Frame.Size = UDim2.new(1, 0, 0, 0)
+			Tab.UIElements.Main.Frame.TextLabel.Visible = true
+			Tab.UIElements.Main.Frame.UIListLayout.HorizontalAlignment = "Left"
+			Tab.UIElements.Main.Frame.UIPadding.PaddingLeft = UDim.new(0, Tab.TabPaddingX)
+			Tab.UIElements.Main.Frame.UIPadding.PaddingRight = UDim.new(0, Tab.TabPaddingX)
+			if Tab.UIElements.Icon then
+				Tab.UIElements.Icon.Size = UDim2.new(0, 16, 0, 16)
+			end
+		end
+	end
+	Tab.ApplyCompactMode = applyCompactMode
+	applyCompactMode(Window.SideBarCompact)
 
 	Tab.UIElements.ContainerFrame = New("ScrollingFrame", {
 		Size = UDim2.new(1, 0, 1, Tab.ShowTabTitle and -((Window.UIPadding * 2.4) + 12) or 0),
@@ -449,6 +485,11 @@ function TabModule.New(Config, UIScale)
 		Tab
 	)
 
+	function Tab:Groupbox(GroupboxConfig)
+		GroupboxConfig = GroupboxConfig or {}
+		return Tab:Group(GroupboxConfig)
+	end
+
 	function Tab:LockAll()
 		--print("LockAll called, number of elements: " .. #self.Elements)
 		for _, element in next, Window.AllElements do
@@ -568,6 +609,14 @@ end
 
 function TabModule:OnChange(func)
 	TabModule.OnChangeFunc = func
+end
+
+function TabModule:SetCompactMode(isCompact)
+	for _, tab in next, TabModule.Tabs do
+		if tab and tab.ApplyCompactMode then
+			tab:ApplyCompactMode(isCompact)
+		end
+	end
 end
 
 function TabModule:SelectTab(TabIndex)
