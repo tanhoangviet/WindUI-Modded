@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WindUI Modded Docs</title>
+  <style>
+    :root { color-scheme: dark; --bg:#11131a; --card:#1b1f2a; --text:#d9deea; --muted:#93a0b8; --accent:#7c3aed; }
+    body { margin:0; font-family: Inter, system-ui, Arial; background:var(--bg); color:var(--text); }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 28px 18px 56px; }
+    .card { background:var(--card); border-radius:14px; padding:18px; margin:14px 0; }
+    a { color:#9f8cff; } code { background:#0f1220; padding:2px 6px; border-radius:6px; }
+    pre { background:#0f1220; padding:12px; border-radius:10px; overflow:auto; }
+    h1,h2 { margin: 8px 0; } p { color:var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>WindUI Modded Documentation</h1>
+    <p>Official repository: <a href="https://github.com/tanhoangviet/WindUI-Modded">github.com/tanhoangviet/WindUI-Modded</a>.</p>
+
+    <div class="card">
+      <h2 id="installation">Installation</h2>
+      <pre><code>loadstring(game:HttpGet("https://raw.githubusercontent.com/tanhoangviet/WindUI-Modded/refs/heads/main/main_example.lua"))()</code></pre>
+    </div>
+
+    <div class="card">
+      <h2>Obsidian + Compact Setup</h2>
+      <pre><code>local Window = WindUI:CreateWindow({
+  Theme = "Obsidian",
+  SideBarCompact = true,
+  CompactSideBarWidth = 64
+})
+
+Window:SetSidebarCompact(true)
+Window:SetCorners(16, 14)
+Window:Watermark({ Text = "WindUI Obsidian" })
+Window:Footer({ Text = "Obsidian UI • Mobile Ready" })
+Window:KeyBindMenu()</code></pre>
+    </div>
+
+    <div class="card">
+      <h2>New APIs</h2>
+      <p><code>Window:TabCard(config)</code>, <code>Window:Footer(config)</code>, <code>Window:KeyBindMenu(config)</code>, <code>Window:SetSidebarCompact(state)</code>.</p>
+    </div>
+  </div>
+</body>
+</html>
