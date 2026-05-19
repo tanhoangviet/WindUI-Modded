@@ -10826,6 +10826,11 @@ ao,
 ap
 )
 
+function ap.Groupbox(az,aA)
+aA=aA or{}
+return ap:Group(aA)
+end
+
 function ap.LockAll(az)
 
 for aA,aB in next,Window.AllElements do
